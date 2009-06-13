@@ -25,7 +25,7 @@ os.chdir(homedir + '/.cache/valkyrie')
 
 for alb in albums:
 	url = alb.get_image_url()
-	if str(url).strip() != 'None': #FIXME Ugly Exception
+	if str(url).strip() != 'None': #FIXME Ugly Exception.
 		urllib.urlretrieve(url, alb.get_title() + '.jpg')
 
 os.system('montage -mode Concatenate -resize 120x120! -tile 5x10 *.jpg ~/test.jpg')
