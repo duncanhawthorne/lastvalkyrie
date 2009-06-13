@@ -21,11 +21,12 @@ for alb in fetched_albums:
 	albums += [alb.get_item()]
 
 homedir = os.path.expanduser('~')
-os.mkdir(homedir + '/.cache/valkyrie')
 os.chdir(homedir + '/.cache/valkyrie')
 
 for alb in albums:
-	urllib.urlretrieve(alb.get_image_url(), alb.get_title() + '.jpg')
+	url = alb.get_image_url()
+	if str(url).strip() != 'None': #FIXME Ugly Exception
+		urllib.urlretrieve(url, alb.get_title() + '.jpg')
 
-os.system('montage -mode Concatenate -resize 120x120! -tile 5x2 *.jpg ~/test.jpg')
+os.system('montage -mode Concatenate -resize 120x120! -tile 5x10 *.jpg ~/test.jpg')
 
