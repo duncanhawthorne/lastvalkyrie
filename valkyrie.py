@@ -14,19 +14,31 @@ md5_password = pylast.md5(getpass.getpass())
 session_key = pylast.SessionKeyGenerator(API_KEY, API_SECRET).get_session_key(username, md5_password)
 
 user = pylast.User(username, API_KEY, API_SECRET, session_key)
-fetched_albums = user.get_top_albums()
+fetched_albums = {}
+periods = ['PERIOD_3MONTHS', 'PERIOD_6MONTHS', 'PERIOD_12MONTHS', 'PERIOD_OVERALL']
+for period in periods:
+	new_albums = user.get_top_albums(period)
+	for alb in new_albums:
+		if alb.get_item().get_title() not in fetched_albums:
+			fetched_albums[alb.get_item().get_title()] = alb.get_item()
 
+album_names = fetched_albums.keys()
 albums = []
-for alb in fetched_albums:
-	albums += [alb.get_item()]
+for name in album_names:
+	albums += [fetched_albums[name]]
 
 homedir = os.path.expanduser('~')
+if not os.path.exists(homedir + '/.cache/valkyrie'):
+	os.mkdir(homedir + '/.cache/valkyrie')
 os.chdir(homedir + '/.cache/valkyrie')
 
 for alb in albums:
 	url = alb.get_image_url()
-	if str(url).strip() != 'None': #FIXME Ugly Exception.
+	if url != None: #check this works
 		urllib.urlretrieve(url, alb.get_title() + '.jpg')
+		#print url
+	else:		
+		print(alb.get_name() + ": artwork not found")
 
-os.system('montage -mode Concatenate -resize 120x120! -tile 5x10 *.jpg ~/test.jpg')
+os.system('montage -mode Concatenate -resize 128x128! -tile 10x8 *.jpg ~/test.jpg')
 
