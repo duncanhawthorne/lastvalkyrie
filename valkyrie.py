@@ -15,7 +15,7 @@ session_key = pylast.SessionKeyGenerator(API_KEY, API_SECRET).get_session_key(us
 
 user = pylast.User(username, API_KEY, API_SECRET, session_key)
 fetched_albums = {}
-periods = ['PERIOD_3MONTHS', 'PERIOD_6MONTHS', 'PERIOD_12MONTHS', 'PERIOD_OVERALL']
+periods = ['6month', '3month', '12month', 'overall']
 for period in periods:
 	new_albums = user.get_top_albums(period)
 	for alb in new_albums:
@@ -33,8 +33,9 @@ if not os.path.exists(homedir + '/.cache/valkyrie'):
 os.chdir(homedir + '/.cache/valkyrie')
 
 for alb in albums:
-	url = alb.get_image_url()
-	if url != None: #check this works
+	print unicode(alb)
+	url = unicode(alb.get_image_url())
+	if url != unicode(None):
 		urllib.urlretrieve(url, alb.get_title() + '.jpg')
 		#print url
 	else:		
