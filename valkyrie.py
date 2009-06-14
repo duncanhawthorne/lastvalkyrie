@@ -22,24 +22,23 @@ for period in periods:
 		if alb.get_item().get_title() not in fetched_albums:
 			fetched_albums[alb.get_item().get_title()] = alb.get_item()
 
-album_names = fetched_albums.keys()
-albums = []
-for name in album_names:
-	albums += [fetched_albums[name]]
-
 homedir = os.path.expanduser('~')
 if not os.path.exists(homedir + '/.cache/valkyrie'):
 	os.mkdir(homedir + '/.cache/valkyrie')
 os.chdir(homedir + '/.cache/valkyrie')
 
-for alb in albums:
-	print unicode(alb)
-	url = unicode(alb.get_image_url())
-	if url != unicode(None):
-		urllib.urlretrieve(url, alb.get_title() + '.jpg')
-		#print url
-	else:		
-		print(alb.get_name() + ": artwork not found")
+for key in fetched_albums:
+	alb = fetched_albums[key]
+	try:
+		print alb
+		url = alb.get_image_url()
+		if url != None:
+			urllib.urlretrieve(url, hash(alb.get_title()) + '.jpg')
+			#print url
+		else:		
+			print(alb.get_name() + ": artwork not found")
+	except:
+		None
 
 os.system('montage -mode Concatenate -resize 128x128! -tile 10x8 *.jpg ~/test.jpg')
 
