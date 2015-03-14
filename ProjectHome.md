@@ -1,0 +1,1 @@
+Produces a 1280 x 1200 wallpaper from top album covers
